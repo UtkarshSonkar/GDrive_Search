@@ -5,6 +5,9 @@ const path = require("path");
 //const fs = require("fs");
 //const readline = require("readline");
 
+//Import Routes Here
+const data = require("./routes/api/data");
+
 client.ping(function (error) {
   if (error) {
     console.error("Elasticsearch cluster is down!", error);
@@ -19,6 +22,8 @@ const app = express();
 app.use(express.json({ extended: false }));
 app.use(express.urlencoded({ extended: true }));
 app.use(formData.parse());
+//Define Routes
+app.use("/api/data", data);
 
 const { google } = require("googleapis");
 const OAuth2Data = require("./credentials.json");
@@ -54,7 +59,7 @@ app.get("/", (req, res) => {
 
     res.render("index.ejs", { url: url });
   } else {
-    res.render("success.ejs");
+    res.redirect("/api/data/earthquakes");
 
     var oauth2 = google.oauth2({
       auth: oAuth2Client,
